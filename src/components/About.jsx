@@ -3,8 +3,8 @@ import windowImage from "../assets/jendela.svg";
 
 function About() {
   return (
-    <section className="bg-[#F4EFEB] py-32 px-10">
-      <div className="max-w-7xl mx-auto flex items-start justify-between">
+    <section className="bg-[#F4EFEB] py-32 px-10 min-h-[100vh]">
+      <div className="max-w-7xl mx-auto flex items-center justify-between w-full">  
         <div className="w-1/2 pr-20">
           <h2
             id="about"

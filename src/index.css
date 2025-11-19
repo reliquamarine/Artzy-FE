@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth; 
+}
+
 h2[id] {
     padding-top: 6rem; 
     margin-top: -6rem; 
@@ -21,6 +25,14 @@ h2[id] {
 .how-it-works-bg {
     background: radial-gradient(
         #F4EFEB 30%,
+        #C3B187 70%, 
+        #9D9167 100% 
+    );
+}
+
+.get-started-bg {
+    background: radial-gradient(
+        #F4EFEB 25%,
         #C3B187 70%, 
         #9D9167 100% 
     );

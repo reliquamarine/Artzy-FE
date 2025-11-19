@@ -42,7 +42,7 @@ function HowItWorks() {
           {steps.map((step) => (
             <div
               key={step.id}
-              className="bg-[#F9F4EF] rounded-[10rem] p-10 px-16 shadow-lg flex items-center gap-10 w-full transform hover:scale-105 transition-transform duration-300"
+              className="bg-[#F9F4EF] rounded-[10rem] p-10 px-16 shadow-lg flex items-center gap-10 w-full h-35 mb-3 transform hover:scale-105 transition-transform duration-300"
             >
               <div className="flex-shrink-0">
                 <img src={step.icon} alt={step.title} className="w-20 h-20" />
