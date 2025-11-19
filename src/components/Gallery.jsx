@@ -42,7 +42,6 @@ const GalleryCard = ({ item }) => (
         </p>
       </div>
       <a
-        href="#"
         className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e] mb-3"
       >
         View Details

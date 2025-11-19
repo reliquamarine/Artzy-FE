@@ -17,3 +17,13 @@ h2[id] {
         #9D9167 100% 
     );
 }
+
+.how-it-works-bg {
+    background: radial-gradient(
+        #F4EFEB 30%,
+        #C3B187 70%, 
+        #9D9167 100% 
+    );
+}
+
+

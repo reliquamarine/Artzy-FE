@@ -2,6 +2,7 @@ import React from "react";
 import heroImage from "../assets/Rumah Fantasi 1.svg";
 import About from "../components/about";
 import Gallery from "../components/Gallery";
+import HowItWorks from "../components/HowItWorks";
 
 function HomePage() {
   return (
@@ -19,7 +20,7 @@ function HomePage() {
             Gallery
           </a>
           <a
-            href="#"
+            href="#howitworks"
             className="hover:text-amber-700 transition duration-150 mr-8"
           >
             How It Works
@@ -63,6 +64,7 @@ function HomePage() {
 
       <About />
       <Gallery />
+      <HowItWorks />
     </div>
   );
 }
