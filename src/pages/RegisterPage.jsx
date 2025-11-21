@@ -1,9 +1,9 @@
-import React from 'react';
-
-function LoginPage() {
+function RegisterPage() {
   return (
-    <p className = "text-center">register page blm di edit</p>
+    <div className="flex w-full min-h-screen bg-[#F5EEE9]">
+      <h1>woi</h1>
+    </div>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
