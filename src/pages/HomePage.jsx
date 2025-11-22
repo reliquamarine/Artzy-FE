@@ -9,11 +9,11 @@ function HomePage() {
   return (
     <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
       <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-5xl font-extrabold text-[#442D1D] font-montserrat px-8">
+        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
           Artzy
         </div>
 
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-2xl font-montserrat">
+        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
           <a href="#gallery" className="hover:text-amber-700 transition duration-150 mr-8">Gallery</a>
           <a href="#howitworks" className="hover:text-amber-700 transition duration-150 mr-8">How It Works</a>
           <a href="#about" className="hover:text-amber-700 transition duration-150 mr-8">About</a>
@@ -22,7 +22,7 @@ function HomePage() {
       </header>
 
       <main className="flex-grow flex items-center justify-center w-full py-16">
-        <div className="flex items-center justify-start max-w-7xl w-full ml-30 mr-auto gap-10 px-10 mt-13"> 
+        <div className="flex items-center justify-start max-w-7xl w-full ml-30 mr-auto gap-10 px-10 mt-5"> 
           <div className="w-4/3 flex justify-end">
             <img
               src={heroImage}

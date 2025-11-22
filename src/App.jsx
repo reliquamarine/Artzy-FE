@@ -18,7 +18,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/beranda" element={<Beranda />} />
         <Route path="/gallery-walls" element={<GalleryWalls />} />
-        <Route path="/view-detail/:id" element={<ViewDetail />} />
+        <Route path="/artwork/:id" element={<ViewDetail />} />
         <Route path="/add-artwork" element={<AddArtwork />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

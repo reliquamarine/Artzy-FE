@@ -1,215 +1,166 @@
-// GalleryWallsController.jsx (File yang menggabungkan logika)
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import React, { useState } from 'react';
+function GalleryWalls() {
+  const navigate = useNavigate();
+  const [artworks, setArtworks] = useState([]);
+  const sliderRef = useRef(null);
 
-// --- Data Karya Seni ---
-const allArtworks = [
-  { id: 1, title: 'Girl with a Pearl Earring', artist: 'Johannes Vermeer', yearCreated: 'c. 1665', category: 'Painting', description: 'Girl with a Pearl Earring (Dutch: Meisje met de parel) is an oil painting by Dutch Golden Age painter Johannes Vermeer. It is a tronie, the Dutch 17th-century description of a head not meant to be a specific portrait.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Vermeer' },
-  { id: 2, title: 'The Scream', artist: 'Edvard Munch', yearCreated: '1893', category: 'Expressionism', description: 'The iconic painting depicting a figure against a turbulent red sky, representing an existential scream.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Munch' },
-  { id: 3, title: 'Mona Lisa', artist: 'Leonardo Da Vinci', yearCreated: '1503–1506', category: 'Portrait', description: 'The best known, the most visited, the most written about, the most sung about, the most parodied work of art in the world.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Da+Vinci' },
-  { id: 4, title: 'The Starry Night', artist: 'Vincent van Gogh', yearCreated: '1889', category: 'Post-Impressionism', description: 'The scene depicts the view outside his asylum room window at Saint-Rémy-de-Provence.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Van+Gogh' },
-  { id: 5, title: 'The Persistence of Memory', artist: 'Salvador Dalí', yearCreated: '1931', category: 'Surrealism', description: 'One of the most recognizable works of Surrealism, depicting melting pocket watches.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Dalí' },
-  { id: 6, title: 'Whistler\'s Mother', artist: 'James Whistler', yearCreated: '1871', category: 'Realism', description: 'A Victorian-era painting of an elderly woman dressed in black, generally viewed as an American icon.', imageUrl: 'https://placehold.co/300x400/f0e6d6/5d4037?text=Whistler' },
-];
+  useEffect(() => {
+    const storedData = localStorage.getItem("artzy_gallery");
+    if (storedData) {
+      setArtworks(JSON.parse(storedData));
+    }
+  }, []);
 
-const CARDS_PER_VIEW = 3; 
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -350, behavior: "smooth" });
+    }
+  };
 
-// --- Komponen Navbar (Digunakan di kedua tampilan) ---
-const CustomNavbar = () => (
-    <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-5xl font-extrabold text-[#442D1D] font-montserrat px-8">
-            Artzy
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 350, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col font-montserrat">
+      <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
+        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
+          Artzy
         </div>
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-2xl font-montserrat">
-            <a href="/beranda" className="hover:text-amber-700 transition duration-150 mr-8">Home</a>
-            <a href="/gallery-walls" className="hover:text-amber-700 transition duration-150 mr-8">Gallery Walls</a>
-            <a href="/add-artwork" className="hover:text-amber-700 transition duration-150 mr-8">Add Artwork</a>
-            <a href="/profile" className="hover:text-amber-700 transition duration-150 mr-8">Profile</a>
+        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
+          <Link
+            to="/beranda"
+            className="hover:text-amber-700 transition duration-150 mr-8"
+          >
+            Home
+          </Link>
+          <Link
+            to="/gallery-walls"
+            className="hover:text-amber-700 transition duration-150 mr-8"
+          >
+            Gallery Walls
+          </Link>
+          <Link
+            to="/add-artwork"
+            className="hover:text-amber-700 transition duration-150 mr-8"
+          >
+            Add Artwork
+          </Link>
+          <Link
+            to="/profile"
+            className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8"
+          >
+            Profile
+          </Link>
         </nav>
-    </header>
-);
+      </header>
 
-// --- Komponen ArtworkCard yang telah dimodifikasi ---
-// Menerima prop onSelect untuk menangani klik tombol
-const ArtworkCard = ({ artwork, onSelect }) => {
-    const { title, artist, imageUrl } = artwork;
-    return (
-        <div className="bg-[#f0e6d6] shadow-xl rounded-xl p-4 flex flex-col items-center mx-4 transition duration-300 hover:shadow-2xl flex-shrink-0 w-72">
-            <div className="relative w-full h-80 mb-4">
-                <img 
-                    src={imageUrl} 
-                    alt={title} 
-                    className="w-full h-full object-cover rounded-lg border border-gray-300"
-                />
-            </div>
-            <div className="text-center text-[#442D1D]">
-                <h3 className="text-xl font-bold mb-1">{title}</h3>
-                <p className="text-lg mb-2">by {artist}</p>
-                {/* Menambahkan onClick handler untuk berpindah ke detail */}
-                <button 
-                    onClick={() => onSelect(artwork)}
-                    className="text-sm font-medium text-amber-700 hover:text-amber-900 transition duration-150"
-                >
-                    View Details
-                </button>
-            </div>
-        </div>
-    );
-};
+      <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
+        <h1 className="text-4xl font-bold text-[#442D1D] text-center mt-10">
+          Gallery Walls
+        </h1>
 
-// --- Komponen ArtworkDetails (Dari permintaan sebelumnya) ---
-const ArtworkDetails = ({ artwork, onGoBack }) => {
-    const { title, artist, yearCreated, category, description, imageUrl } = artwork;
-
-    return (
-        <div className="flex-grow flex flex-col items-center pt-10"
-            style={{ 
-                background: 'linear-gradient(to bottom, #f0e6d6 0%, #d4c2a5 100%)',
-            }}
-        >
-            <div className="flex items-center w-full max-w-5xl mb-10 px-10">
-                <button 
-                    onClick={onGoBack} 
-                    className="text-[#5d4037] text-4xl font-bold mr-6 hover:opacity-75 transition duration-150"
-                >
-                    &larr;
-                </button>
-                <h1 className="text-5xl font-bold text-[#5d4037] pt-5 mx-auto">
-                    Gallery Walls
-                </h1>
-                <div className="w-10"></div>
-            </div>
-
-            <div className="bg-[#f0e6d6] shadow-2xl rounded-xl p-8 w-full max-w-5xl flex text-[#333] mb-20">
-                <div className="flex-shrink-0 w-80 mr-12">
-                    <img 
-                        src={imageUrl} 
-                        alt={title} 
-                        className="w-full h-auto rounded-lg shadow-xl"
-                    />
-                </div>
-                <div className="flex-grow text-xl">
-                    <p className="mb-4">
-                        <span className="font-bold text-2xl text-[#5d4037]">Title</span>
-                        <br />{title}
-                    </p>
-                    <p className="mb-4">
-                        <span className="font-bold text-2xl text-[#5d4037]">Artist Name</span>
-                        <br />{artist}
-                    </p>
-                    <p className="mb-4">
-                        <span className="font-bold text-2xl text-[#5d4037]">Year Created</span>
-                        <br />{yearCreated}
-                    </p>
-                    <p className="mb-4">
-                        <span className="font-bold text-2xl text-[#5d4037]">Category</span>
-                        <br />{category}
-                    </p>
-                    <p className="mt-6">
-                        <span className="font-bold text-2xl text-[#5d4037]">Description</span>
-                        <br />{description}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// --- Komponen GalleryWalls yang telah dimodifikasi (Tampilan Geser) ---
-const GalleryView = ({ setDetailArtwork }) => {
-    const [startIndex, setStartIndex] = useState(0);
-
-    const totalPages = Math.ceil(allArtworks.length / CARDS_PER_VIEW);
-    const currentPage = Math.floor(startIndex / CARDS_PER_VIEW);
-
-    const handleNext = () => {
-        if (startIndex + CARDS_PER_VIEW < allArtworks.length) {
-            setStartIndex(prevIndex => prevIndex + CARDS_PER_VIEW);
-        }
-    };
-
-    const handlePrev = () => {
-        if (startIndex > 0) {
-            setStartIndex(prevIndex => Math.max(0, prevIndex - CARDS_PER_VIEW));
-        }
-    };
-
-    const artworksToShow = allArtworks.slice(startIndex, startIndex + CARDS_PER_VIEW);
-
-    return (
-        <main className="flex-grow flex flex-col items-center pt-10"
-            style={{ 
-                background: 'linear-gradient(to bottom, #f0e6d6 0%, #d4c2a5 100%)',
-            }}
-        >
-            <h1 className="text-5xl font-bold text-[#5d4037] mb-16 pt-5">
-                Gallery Walls
-            </h1>
-
-            <div className="flex items-center justify-center w-full max-w-7xl pb-20">
-                <button 
-                    onClick={handlePrev}
-                    disabled={startIndex === 0}
-                    className={`text-[#5d4037] text-5xl p-2 mr-6 transition duration-150 
-                               ${startIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-75'}`}
-                >
-                    &lt;
-                </button>
-                
-                <div className="flex space-x-8 overflow-hidden">
-                    {artworksToShow.map(artwork => (
-                        <ArtworkCard 
-                            key={artwork.id} 
-                            artwork={artwork} 
-                            // Meneruskan fungsi untuk beralih tampilan
-                            onSelect={setDetailArtwork} 
-                        />
-                    ))}
-                </div>
-
-                <button 
-                    onClick={handleNext}
-                    disabled={startIndex + CARDS_PER_VIEW >= allArtworks.length}
-                    className={`text-[#5d4037] text-5xl p-2 ml-6 transition duration-150 
-                               ${startIndex + CARDS_PER_VIEW >= allArtworks.length ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-75'}`}
-                >
-                    &gt;
-                </button>
-            </div>
-
-            <p className="text-lg text-[#5d4037] mb-5">
-                Halaman {currentPage + 1} dari {totalPages}
+        {artworks.length === 0 ? (
+          <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-20">
+            <p className="text-2xl font-medium text-[#442D1D] mb-12 opacity-90">
+              looks a little empty here.. start your collection
             </p>
-        </main>
-    );
-};
+            <button
+              onClick={() => navigate("/add-artwork")}
+              className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300"
+            >
+              + Add Artwork
+            </button>
+          </div>
+        ) : (
+          <div className="flex-grow flex items-center justify-center w-full px-10 relative pb-20">
+            <button
+              onClick={scrollLeft}
+              className="absolute left-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="#442D1D"
+                className="w-10 h-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                />
+              </svg>
+            </button>
 
+            <div
+              ref={sliderRef}
+              className="flex gap-12 overflow-x-auto scroll-smooth px-12 py-10 no-scrollbar w-full max-w-7xl items-center"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {artworks.map((art) => (
+                <div
+                  key={art.id}
+                  className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300"
+                >
+                  <div className="h-80 overflow-hidden flex justify-center mt-8 px-6">
+                    <img
+                      src={art.image}
+                      alt={art.title}
+                      className="w-full h-full object-cover rounded-md shadow-sm"
+                    />
+                  </div>
 
-// --- Komponen Utama Pengendali Navigasi ---
-function GalleryWallsController() {
-    // State untuk menyimpan data karya seni yang akan ditampilkan di halaman detail
-    // Jika null, tampilkan tampilan galeri geser.
-    const [selectedArtwork, setSelectedArtwork] = useState(null);
+                  <div className="p-6 flex flex-col justify-between flex-grow mt-[-0.5rem]">
+                    <div className="mb-4">
+                      <p className="text-xl font-bold text-[#442D1D] mb-1 leading-tight">
+                        {art.title}
+                      </p>
+                      <p className="text-base font-medium text-[#442D1D]">
+                        by {art.artist}
+                      </p>
+                    </div>
 
-    // Fungsi untuk kembali ke tampilan galeri
-    const handleGoBack = () => {
-        setSelectedArtwork(null);
-    };
+                    <div
+                      onClick={() => navigate(`/artwork/${art.id}`)}
+                      className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e] cursor-pointer mb-2"
+                    >
+                      View Details
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-    return (
-        <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
-            <CustomNavbar />
-            
-            {/* Logika Kondisional: Tampilkan Detail atau Galeri */}
-            {selectedArtwork ? (
-                // Tampilkan halaman detail
-                <ArtworkDetails artwork={selectedArtwork} onGoBack={handleGoBack} />
-            ) : (
-                // Tampilkan halaman galeri geser
-                <GalleryView setDetailArtwork={setSelectedArtwork} />
-            )}
-        </div>
-    );
+            <button
+              onClick={scrollRight}
+              className="absolute right-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="#442D1D"
+                className="w-10 h-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+      </main>
+    </div>
+  );
 }
 
-export default GalleryWallsController;
+export default GalleryWalls;

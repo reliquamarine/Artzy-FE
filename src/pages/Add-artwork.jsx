@@ -1,146 +1,197 @@
-// AddArtwork.jsx (Menggunakan Tailwind CSS)
+import React, { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import uploadIconPlaceholder from "../assets/ep_upload-filled.svg"; 
 
-import React, { useState } from 'react';
-
-/**
- * Komponen Input Formulir Umum
- */
-const FormInput = ({ label, placeholder, type = 'text' }) => (
-  <div className="mb-4">
-    <label className="block text-xl font-bold text-[#5d4037] mb-2">{label}</label>
-    <input
-      type={type}
-      placeholder={placeholder}
-      // Styling input yang mirip dengan gambar
-      className="w-full p-4 rounded-full bg-[#e0d2bd] border border-[#5d4037] text-[#5d4037] placeholder-[#8d7c6e] focus:outline-none focus:ring-2 focus:ring-[#5d4037]"
-    />
-  </div>
-);
-
-/**
- * Komponen AddArtwork (Halaman Tambah Karya Seni)
- */
 function AddArtwork() {
-  // State untuk mengelola file yang diunggah (opsional, untuk fungsionalitas lanjutan)
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const navigate = useNavigate();
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [title, setTitle] = useState("");
+  const [artist, setArtist] = useState("");
+  const [year, setYear] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const fileInputRef = useRef(null);
 
-  // Simulasi fungsi drag dan drop (Anda perlu mengimplementasikan logika file nyata)
-  const handleDragOver = (e) => e.preventDefault();
-  const handleDrop = (e) => {
-    e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setUploadedFile(e.dataTransfer.files[0]);
-      console.log('File di-drop:', e.dataTransfer.files[0].name);
-      // Di sini Anda akan menambahkan logika untuk pratinjau gambar dan upload
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => resolve(fileReader.result);
+      fileReader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
-  
-  const handleFormSubmit = (e) => {
-      e.preventDefault();
-      alert('Formulir disimpan! (Simulasi)');
-      // Logika pengiriman data ke backend ada di sini
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!imageFile || !title || !artist) {
+      alert("Please upload an image and fill in Title and Artist name.");
+      return;
+    }
+
+    try {
+      const base64Image = await convertToBase64(imageFile);
+      const newArtwork = {
+        id: Date.now(),
+        image: base64Image,
+        title,
+        artist,
+        year,
+        category,
+        description,
+      };
+
+      const existingData = localStorage.getItem("artzy_gallery");
+      let gallery = existingData ? JSON.parse(existingData) : [];
+      gallery.push(newArtwork);
+      localStorage.setItem("artzy_gallery", JSON.stringify(gallery));
+
+      alert("Artwork Saved Successfully!");
+      navigate("/gallery-walls");
+    } catch (error) {
+      console.error("Error saving artwork:", error);
+      alert("Failed to save artwork.");
+    }
   };
 
+  const inputFields = [
+    {
+      label: "Title",
+      val: title,
+      set: setTitle,
+      placeholder: "example: Girl with a Pearl Earring",
+      type: "text",
+    },
+    {
+      label: "Artist Name",
+      val: artist,
+      set: setArtist,
+      placeholder: "example: by Johannes Vermeer",
+      type: "text",
+    },
+    {
+      label: "Year Created", 
+      val: year,
+      set: setYear,
+      placeholder: "",
+      type: "date", 
+    },
+    {
+      label: "Category",
+      val: category,
+      set: setCategory,
+      placeholder: "painting, photography, digital art, etc",
+      type: "text",
+    },
+  ];
+
   return (
-    <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
-      
-      {/* --- Bagian Navigasi (Header) --- */}
+    <div className="min-h-screen flex flex-col font-montserrat">
       <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-5xl font-extrabold text-[#442D1D] font-montserrat px-8">
+        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
+          {" "}
           Artzy
         </div>
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-2xl font-montserrat">
-          <a href="/beranda" className="hover:text-amber-700 transition duration-150 mr-8">Home</a>
-          <a href="/gallery-walls" className="hover:text-amber-700 transition duration-150 mr-8">Gallery Walls</a>
-          <a href="/add-artwork" className="hover:text-amber-700 transition duration-150 mr-8">Add Artwork</a>
-          <a href="/profile" className="hover:text-amber-700 transition duration-150 mr-8">Profile</a>
+
+        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
+          <Link to="/beranda" className="hover:text-amber-700 transition duration-150 mr-8">Home</Link>
+          <Link to="/gallery-walls" className="hover:text-amber-700 transition duration-150 mr-8">Gallery Walls </Link>
+          <Link to="/add-artwork" className="hover:text-amber-700 transition duration-150 mr-8">{" "}Add Artwork</Link>
+          <Link to="/profile" className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8">{" "}Profile</Link>
         </nav>
       </header>
-      {/* -------------------------------------------------------------------------------------------------- */}
 
-      {/* --- Bagian Utama Formulir Tambah Karya Seni --- */}
-      <main className="flex-grow flex flex-col items-center py-12"
-            style={{ 
-                background: 'linear-gradient(to bottom, #f0e6d6 0%, #d4c2a5 100%)',
-            }}
-      >
-        <form onSubmit={handleFormSubmit} className="flex w-full max-w-7xl px-10">
-          
-          {/* Kolom Kiri: Drag and Drop */}
-          <div className="w-1/2 pr-12">
-            <h2 className="text-3xl font-bold text-[#5d4037] mb-6">
-              Add to Your Collection
-            </h2>
-            
-            <div 
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              // Styling area drag & drop
-              className="bg-[#e0d2bd] border-4 border-dashed border-[#5d4037] rounded-xl flex flex-col items-center justify-center p-20 min-h-[500px] cursor-pointer transition duration-300 hover:bg-[#d4c2a5]"
-              onClick={() => document.getElementById('file-upload').click()} // Klik untuk membuka file explorer
-            >
-              {uploadedFile ? (
-                // Tampilan setelah file diunggah
-                <p className="text-xl text-[#5d4037] text-center">
-                  File Siap: **{uploadedFile.name}**
-                  <br/>Klik untuk mengubah.
+      <main className="flex-grow w-full px-16 py-8 beranda-bg">
+        <h1 className="text-4xl font-bold text-center mt-10 mb-15 text-[#442D1D]">
+          Add to Your Collection
+        </h1>
+
+        <div className="flex flex-row gap-12 h-[600px]">
+          <div
+            className="w-1/2 h-full rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              className="hidden"
+            />
+
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-full object-contain p-4"
+              />
+            ) : (
+              <>
+                <img
+                  src={uploadIconPlaceholder}
+                  alt="Upload Icon"
+                  className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]"
+                />
+                <p className="text-xl font-semibold text-[#442D1D]">
+                  Drag and Drop Image Files to Upload
                 </p>
-              ) : (
-                // Tampilan default
-                <>
-                  <svg className="w-20 h-20 text-[#5d4037] mb-4" fill="currentColor" viewBox="0 0 20 20">
-                    {/* Ikon awan (cloud) */}
-                    <path d="M13 10H7v-1h6v1zm2 0h-1v-1h1v1zm-8 0h-1v-1h1v1zM6 14a2 2 0 100-4 2 2 0 000 4zM14 14a2 2 0 100-4 2 2 0 000 4zM10 2a8 8 0 100 16 8 8 0 000-16zM10 17a7 7 0 110-14 7 7 0 010 14z"/>
-                  </svg>
-                  <p className="text-xl font-medium text-[#5d4037]">
-                    **Drag and Drop Image Files to Upload**
-                  </p>
-                </>
-              )}
-              {/* Input file tersembunyi untuk klik biasa */}
-              <input type="file" id="file-upload" className="hidden" onChange={(e) => setUploadedFile(e.target.files[0])} accept="image/*" />
-            </div>
+              </>
+            )}
           </div>
 
-          {/* Kolom Kanan: Formulir Detail */}
-          <div className="w-1/2 pl-12">
-            
-            <FormInput label="Title" placeholder="input text" />
-            <FormInput label="Artist Name" placeholder="input text" />
-            <FormInput label="Year Created" placeholder="input text" />
-            
-            <FormInput 
-              label="Category" 
-              placeholder="painting, photography, digital art, etc" 
-            />
-            
-            <div className="mb-6">
-              <label className="block text-xl font-bold text-[#5d4037] mb-2">Description</label>
+          <form
+            onSubmit={handleSave}
+            className="w-1/2 flex flex-col justify-between font-medium text-[#442D1D]"
+          >
+            {inputFields.map((field, idx) => (
+              <div key={idx} className="flex flex-col gap-2">
+                <label className="text-lg font-bold">{field.label}</label>
+                <input
+                  type={field.type}
+                  value={field.val}
+                  onChange={(e) => field.set(e.target.value)}
+                  placeholder={field.placeholder}
+                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50  text-[#442D1D]/50 transition-all duration-200  backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                />
+              </div>
+            ))}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-lg font-bold">Description</label>
               <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="optional"
-                rows="4" // Menambahkan baris untuk tampilan yang lebih baik
-                className="w-full p-4 rounded-xl bg-[#e0d2bd] border border-[#5d4037] text-[#5d4037] placeholder-[#8d7c6e] focus:outline-none focus:ring-2 focus:ring-[#5d4037]"
+                rows="4"
+                className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               />
             </div>
 
-            {/* Tombol Aksi */}
-            <div className="flex justify-end space-x-4 mt-10">
-              <button 
-                type="submit" 
-                className="bg-[#5d4037] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-[#4e342e] transition duration-200"
+            <div className="flex justify-end gap-6 mt-4">
+              <button
+                type="submit"
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D]"
               >
                 Save Artwork
               </button>
-              <button 
-                type="button" 
-                className="bg-[#795548] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-[#6d4c41] transition duration-200"
-                onClick={() => console.log('Batal')}
+              <button
+                type="button"
+                onClick={() => navigate("/gallery-walls")}
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D]"
               >
                 Cancel
               </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </main>
     </div>
   );
