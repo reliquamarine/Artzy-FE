@@ -1,10 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import girlWithPearl from "../assets/image 6.png";
 import theScream from "../assets/image 8.png";
 import monaLisa from "../assets/image 7.png";
 
-export const galleryItems = [
+const galleryItems = [
   {
     id: 1,
     image: girlWithPearl,
@@ -26,7 +25,7 @@ export const galleryItems = [
 ];
 
 const GalleryCard = ({ item }) => (
-  <div className="bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col w-92 justify-center transform hover:scale-105 transition-transform duration-300">
+  <div className="bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col w-98 justify-center transform hover:scale-105 transition-transform duration-300">
     <div className="h-90 overflow-hidden flex justify-center mt-8">
       <img
         src={item.image}
@@ -42,15 +41,12 @@ const GalleryCard = ({ item }) => (
           by {item.artist}
         </p>
       </div>
-      <Link
-        to={`/view-detail/${item.id}`}
-        aria-label={`View details for ${item.title}`}
-        className="inline-block mt-4 mb-3"
+      <a
+        href="#"
+        className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e] mb-3"
       >
-        <span className="inline-block bg-[#442D1D] text-[#E8D1A7] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#6c4e3e] transition">
-          View Details
-        </span>
-      </Link>
+        View Details
+      </a>
     </div>
   </div>
 );
