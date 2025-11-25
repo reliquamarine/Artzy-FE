@@ -178,14 +178,14 @@ function AddArtwork() {
             <div className="flex justify-end gap-6 mt-4">
               <button
                 type="submit"
-                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D]"
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
               >
                 Save Artwork
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/gallery-walls")}
-                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D]"
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
               >
                 Cancel
               </button>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function GetStarted() {
   return (
@@ -13,11 +14,13 @@ function GetStarted() {
             Sign in to begin building your personal digital gallery
           </p>
 
-          <a href="/login" className="bg-white text-[#442D1D] font-medium text-2xl py-4 px-10 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 flex items-center gap-2 font-montserrat">
-            Get Started
-            <span className="text-3xl">→</span>
-          </a>
-          
+          <Link
+            to="/login"
+            className="bg-white text-[#442D1D] font-medium text-2xl py-4 px-10 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 flex items-center gap-2 font-montserrat"
+          >
+            {" "}
+            Get Started <span className="text-3xl">→</span>
+          </Link>
         </div>
       </div>
     </section>

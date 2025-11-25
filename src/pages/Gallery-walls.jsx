@@ -71,7 +71,7 @@ function GalleryWalls() {
             </p>
             <button
               onClick={() => navigate("/add-artwork")}
-              className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300"
+              className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
             >
               + Add Artwork
             </button>
@@ -80,7 +80,7 @@ function GalleryWalls() {
           <div className="flex-grow flex items-center justify-center w-full px-10 relative pb-20">
             <button
               onClick={scrollLeft}
-              className="absolute left-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition"
+              className="absolute left-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +139,7 @@ function GalleryWalls() {
 
             <button
               onClick={scrollRight}
-              className="absolute right-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition"
+              className="absolute right-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

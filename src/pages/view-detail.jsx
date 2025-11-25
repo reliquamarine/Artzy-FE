@@ -125,7 +125,7 @@ function ViewDetail() {
                     />
                   </svg>
                 </div>
-                <span>Delete Artwork</span>
+                <span className="cursor-pointer">Delete Artwork</span>
               </button>
             </div>
           </div>
