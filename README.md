@@ -4,14 +4,13 @@
 
 ```bash
 git clone https://github.com/reliquamarine/Artzy-FE.git
-cd pemweb
+cd Artzy-FE
 ```
 
 ### 2. Install Dependencies
 
 ```bash
 npm install
-npm install react-router-dom
 ```
 
 ### 3. Run Development Server
