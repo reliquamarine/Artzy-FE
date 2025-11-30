@@ -56,8 +56,8 @@ export default function EditProfilePage() {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert("File size too large! Max 2MB.");
+      if (file.size > 10 * 1024 * 1024) {
+        alert("File size too large! Max 10MB.");
         return;
       }
       const reader = new FileReader();

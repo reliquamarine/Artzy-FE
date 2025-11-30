@@ -9,7 +9,8 @@ import ViewDetail from "./pages/view-detail";
 import AddArtwork from "./pages/Add-artwork";
 import Profile from "./pages/Profil";
 import ForgotPassPage from "./pages/forgotpass";
-import EditProfilePage from "./pages/EditProfilePage"
+import EditProfilePage from "./pages/EditProfilePage";
+import EditArtworkPage from "./pages/EditArtworkPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/add-artwork" element={<AddArtwork />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
+        <Route path="/edit-artwork/:id" element={<EditArtworkPage />} />
       </Routes>
     </Router>
   );

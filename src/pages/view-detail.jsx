@@ -1,5 +1,8 @@
+// frontend/src/pages/ViewDetail.jsx (Kode Revisi Penuh)
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { Edit3 } from "lucide-react"; // Import ikon Edit
 
 function ViewDetail() {
   const { id } = useParams();
@@ -145,7 +148,19 @@ function ViewDetail() {
               </p>
             </div>
 
-            <div className="pt-4 mt-auto border-t border-[#442D1D]/10">
+            {/* START REVISI: Tambah tombol EDIT dan atur layout tombol */}
+            <div className="pt-4 mt-auto border-t border-[#442D1D]/10 flex justify-between items-center">
+              {/* Tombol EDIT BARU */}
+              <button
+                onClick={() => navigate(`/edit-artwork/${artwork.id}`)}
+                className="group flex items-center gap-3 text-[#442D1D] font-bold text-base hover:text-[#2c1d13] transition w-fit"
+              >
+                <div className="p-2 bg-[#442D1D]/10 rounded-full group-hover:bg-[#442D1D]/20 transition">
+                  <Edit3 className="w-4 h-4" />
+                </div>
+                <span className="cursor-pointer">Edit Artwork</span>
+              </button>
+              {/* Tombol DELETE LAMA */}
               <button
                 onClick={handleDelete}
                 className="group flex items-center gap-3 text-red-800 font-bold text-base hover:text-red-600 transition w-fit"
@@ -169,6 +184,7 @@ function ViewDetail() {
                 <span className="cursor-pointer">Delete Artwork</span>
               </button>
             </div>
+            {/* END REVISI */}
           </div>
         </div>
       </main>
