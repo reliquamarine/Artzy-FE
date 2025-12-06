@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toastSuccess, toastError } from '../components/ToastWithProgress';
 import registerBg from "../assets/Rumah Fantasi 2.png";
 
 function RegisterPage() {
@@ -47,10 +48,10 @@ function RegisterPage() {
 
       if (!response.ok) throw new Error(data.error || "Failed to Register");
 
-      alert("Register success! Please login.");
+      toastSuccess("Register success! Please login.");
       navigate("/login");
     } catch (err) {
-      setError(err.message);
+      toastError(err.message);
     }
   };
 

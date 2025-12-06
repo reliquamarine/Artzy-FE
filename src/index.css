@@ -15,17 +15,46 @@ h2[id] {
 }
 
 .gallery-gradient-bg {
-  background: radial-gradient(#f4efeb 30%, #c3b187 70%, #9d9167 100%)
+  background: radial-gradient(#f4efeb 30%, #c3b187 70%, #9d9167 100%);
 }
 
 .how-it-works-bg {
-  background: radial-gradient(#f4efeb 30%, #c3b187 70%, #9d9167 100%)
+  background: radial-gradient(#f4efeb 30%, #c3b187 70%, #9d9167 100%);
 }
 
 .get-started-bg {
-  background: radial-gradient(#f4efeb 25%, #c3b187 70%, #9d9167 100%)
+  background: radial-gradient(#f4efeb 25%, #c3b187 70%, #9d9167 100%);
 }
 
 .beranda-bg {
-  background: linear-gradient(#f4efeb 5%, #c3b187 40%, #9d9167 100%)
+  background: linear-gradient(#f4efeb 5%, #c3b187 40%, #9d9167 100%);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-48px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(12px);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-80px);
+    opacity: 0;
+  }
+}
+
+.animate-slideOut {
+  animation: slideOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
