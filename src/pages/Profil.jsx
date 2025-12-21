@@ -15,6 +15,7 @@ function Profile() {
   const [artworkCount, setArtworkCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isLoggedIn = true;
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
@@ -86,28 +87,24 @@ function Profile() {
           <nav className="hidden md:flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
             <Link
               to="/beranda"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Home
             </Link>
             <Link
               to="/gallery-walls"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Gallery Walls
             </Link>
             <Link
               to="/add-artwork"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Add Artwork
             </Link>
             <Link
               to="/profile"
-              onClick={() => setIsMenuOpen(false)}
               className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
             >
               Profile
@@ -208,7 +205,6 @@ function Profile() {
                   />
                 )}
               </div>
-
               <div className="text-center sm:text-left">
                 <p className="text-xl md:text-2xl font-bold text-[#442D1D]">
                   {profileData.first_name} {profileData.last_name}
@@ -218,13 +214,11 @@ function Profile() {
                 </p>
               </div>
             </div>
-
             <button
               onClick={() => navigate("/edit-profile")}
               className="flex items-center space-x-2 bg-[#442D1D] text-white text-sm md:text-base font-semibold py-2 px-4 md:px-6 rounded-full shadow-md hover:bg-[#6c4e3e] transition duration-200 cursor-pointer flex-shrink-0 w-full sm:w-auto mt-4 md:mt-0"
             >
-              <Edit3 className="w-4 h-4" />
-              <span>Edit Profile</span>
+              <Edit3 className="w-4 h-4" /> <span>Edit Profile</span>
             </button>
           </div>
 
@@ -241,7 +235,6 @@ function Profile() {
                   {profileData.first_name || "-"}
                 </p>
               </div>
-
               <div className="flex flex-col">
                 <label className="text-xs font-semibold text-[#442D1D]/70 mb-1">
                   Last Name
@@ -250,7 +243,6 @@ function Profile() {
                   {profileData.last_name || "-"}
                 </p>
               </div>
-
               <div className="flex flex-col">
                 <label className="text-xs font-semibold text-[#442D1D]/70 mb-1">
                   Email Address

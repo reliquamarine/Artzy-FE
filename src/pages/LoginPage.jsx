@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
 
@@ -9,8 +9,11 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+
+  const backPath = location.state?.from || "/";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,7 +43,8 @@ function LoginPage() {
 
       localStorage.setItem("token", data.token);
       toastSuccess("Login success!");
-      navigate("/beranda");
+
+      navigate(location.state?.from || "/beranda");
     } catch (err) {
       toastError(err.message);
     }
@@ -51,7 +55,7 @@ function LoginPage() {
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center md:items-start px-6 md:px-24 py-10 gap-4 md:gap-6 text-[#442D1D] relative min-h-screen md:min-h-0">
         <div className="absolute top-6 left-6 md:top-8 md:left-8 text-xl">
           <Link
-            to="/"
+            to={backPath}
             className="flex items-center gap-1 hover:opacity-75 transition"
           >
             <svg
@@ -142,7 +146,9 @@ function LoginPage() {
 
           <button
             type="button"
-            onClick={() => navigate("/forgot-password")}
+            onClick={() =>
+              navigate("/forgot-password", { state: { from: backPath } })
+            }
             className="self-start text-xs md:text-sm hover:underline text-[#442D1D] font-medium cursor-pointer"
           >
             Forgot Password
@@ -168,6 +174,7 @@ function LoginPage() {
             Don't have an account?{" "}
             <Link
               to="/register"
+              state={{ from: backPath }} // Teruskan state ke halaman register juga
               className="font-bold hover:underline text-[#442D1D]"
             >
               Create an account

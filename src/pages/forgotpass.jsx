@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
 
 function ForgotPasswordPage() {
@@ -8,37 +8,34 @@ function ForgotPasswordPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+
+  const token = localStorage.getItem("token");
+  const backPath = location.state?.from || (token ? "/beranda" : "/");
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
     setIsLoading(true);
-
     if (!email.trim()) {
       setError("Please enter your email address.");
       setIsLoading(false);
       return;
     }
-
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || "Failed to send reset link");
       }
       setSuccessMessage("Reset link has been sent to your email!");
-
       setTimeout(() => {
         navigate("/login");
       }, 5000);
@@ -54,7 +51,7 @@ function ForgotPasswordPage() {
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center md:items-start px-6 md:px-24 py-10 gap-4 md:gap-6 text-[#442D1D] relative min-h-screen md:min-h-0">
         <div className="absolute top-6 left-6 md:top-8 md:left-8 text-xl">
           <Link
-            to="/login"
+            to={backPath}
             className="flex items-center gap-1 hover:opacity-75 transition"
           >
             <svg
@@ -70,9 +67,7 @@ function ForgotPasswordPage() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="text-base md:text-lg font-medium">
-              Back to Login
-            </span>
+            <span className="text-base md:text-lg font-medium">Back</span>
           </Link>
         </div>
 
@@ -97,7 +92,6 @@ function ForgotPasswordPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              // py-2 (HP) -> py-3 (Laptop)
               className="w-full px-5 py-2 md:py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-xl bg-[#442D1D]/25 border border-white/50 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               placeholder="user@gmail.com"
               disabled={isLoading}
@@ -127,6 +121,7 @@ function ForgotPasswordPage() {
             Remember your password?{" "}
             <Link
               to="/login"
+              state={{ from: location.state?.from }}
               className="font-bold hover:underline text-[#442D1D]"
             >
               Login here
@@ -134,7 +129,6 @@ function ForgotPasswordPage() {
           </p>
         </form>
       </div>
-
       <div className="hidden md:block w-3/5 h-full">
         <div className="w-full h-full overflow-hidden">
           <img

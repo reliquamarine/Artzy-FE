@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
 import uploadIconPlaceholder from "../assets/ep_upload-filled.svg";
@@ -12,9 +12,19 @@ function AddArtwork() {
   const [year, setYear] = useState("");
   const [category, setCategory] = useState("Painting");
   const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const fileInputRef = useRef(null);
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toastError("Please login to add artwork");
+      navigate("/login", { state: { from: "/beranda" } });
+    }
+  }, [navigate]);
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -37,10 +47,17 @@ function AddArtwork() {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      navigate("/login", { state: { from: "/beranda" } });
+      return;
+    }
+
     if (!imageFile || !title || !artist) {
       toastError("Please upload an image and fill in Title and Artist name.");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const base64Image = await convertToBase64(imageFile);
@@ -62,10 +79,13 @@ function AddArtwork() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save artwork");
+
       toastSuccess("Artwork saved successfully!");
       navigate("/gallery-walls");
     } catch (err) {
       toastError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -184,14 +204,25 @@ function AddArtwork() {
             <div className="flex justify-center md:justify-end gap-4 md:gap-6 mt-4 mb-5">
               <button
                 type="submit"
-                className="px-6 py-2 rounded-full text-white font-medium text-base md:text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
+                disabled={isSubmitting}
+                className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
+                  isSubmitting
+                    ? "opacity-70 cursor-not-allowed"
+                    : "hover:scale-105"
+                }`}
               >
-                Save Artwork
+                {isSubmitting ? "Saving..." : "Save Artwork"}
               </button>
+
               <button
                 type="button"
                 onClick={() => navigate("/gallery-walls")}
-                className="px-6 py-2 rounded-full text-white font-medium text-base md:text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
+                disabled={isSubmitting}
+                className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
+                  isSubmitting
+                    ? "opacity-70 cursor-not-allowed"
+                    : "hover:scale-105"
+                }`}
               >
                 Cancel
               </button>

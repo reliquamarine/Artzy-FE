@@ -35,8 +35,10 @@ function HomePage() {
             >
               How It Works
             </a>
+
             <Link
               to="/login"
+              state={{ from: "/" }} 
               className="font-semibold py-2 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
             >
               Login
@@ -104,8 +106,10 @@ function HomePage() {
             >
               How It Works
             </a>
+
             <Link
               to="/login"
+              state={{ from: "/" }} 
               onClick={() => setIsOpen(false)}
               className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200"
             >
